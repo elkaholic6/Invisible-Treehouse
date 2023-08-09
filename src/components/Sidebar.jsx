@@ -9,8 +9,7 @@ import UploadMusicButton from './UploadMusicButton';
 const NavLinks = ({ handleClick, fullAccount, showProfileLink }) => (
   <div className='mt-10'>
     {links.map((item) => (
-      <>
-        {showProfileLink && item.name === 'Profile' ? null : (
+        showProfileLink && item.name === 'Profile' ? null : (
           <NavLink 
             key={item.name}
             to={item.to === '/treehouse-profile/:fullAccount' ? `/treehouse-profile/${fullAccount}` : item.to} 
@@ -20,8 +19,7 @@ const NavLinks = ({ handleClick, fullAccount, showProfileLink }) => (
             <item.icon className='w-6 h-6 mr-2' />
             {item.name}
           </NavLink>
-        )}
-      </>
+        )
     ))}
   </div>
 );

@@ -2,11 +2,11 @@ import { ethers } from "ethers";
 import Minter from '../artifacts/contracts/mint/Minter.sol/Minter.json';
 import { marketplaceAddress } from "../src/customHooks/fetchMarketplaceContract";
 
+const API_KEY = import.meta.env.VITE_REACT_APP_ALCHEMY_API_KEY;
 
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-console.log('provider, ', provider);
+
+const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${API_KEY}`);
 const signer = provider.getSigner();
-console.log('signer: ', signer);
 let account;
 
 async function getAccountAddress() {
@@ -54,7 +54,6 @@ async function mintNFT(contractAddress, quantity) {
 }
 
 async function deployAndMint(_ipfs, quantity, royaltyFee) {
-  console.log('Deploying and minting witht the account: ', account);
   const _contract = await deploy(_ipfs, marketplaceAddress, royaltyFee);
   await mintNFT(_contract.address, quantity);
 }

@@ -11,18 +11,18 @@ import fetchIPFSMetadata from '../customHooks/fetchIPFSMetadata';
 import { useFetchNftsQuery } from '../redux/services/nftStorageApi';
 import { Loader } from '../components';
 
+// const API_KEY = import.meta.env.VITE_REACT_APP_ALCHEMY_API_KEY;
+// const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${API_KEY}`);
 
 
 
 
-const marketplaceAddress = "0x316Fbd5e5759CEcF3fcBBC59965d7787abbd4290";
-const marketplaceAbi = NFTMarketplace.abi;
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
-const marketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceAbi, signer);
-console.log('marketplaceContract: ', marketplaceContract);
+// const marketplaceAddress = "0x316Fbd5e5759CEcF3fcBBC59965d7787abbd4290";
+// const marketplaceAbi = NFTMarketplace.abi;
+// const signer = provider.getSigner();
+// const marketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceAbi, signer);
 
-export { marketplaceContract };
+// export { marketplaceContract };
 
 function Profile() {
     const [listedNFTs, setListedNFTs] = useState([]);
@@ -48,7 +48,6 @@ function Profile() {
       async function getBalance() {
         try {
           const { ethereum } = window;
-          console.log('ethereum: ', ethereum);
           if (!ethereum) {
             console.log('Make sure you have metamask!');
             return;
@@ -69,13 +68,15 @@ function Profile() {
     useEffect(() => {
       const fetchMetadataAndSetState = async () => {
         try {
-          const metadata = await fetchUserTokens(fullAccount);
-          setListedNFTs(metadata);
-          const ipfsMetadata = await fetchIPFSMetadata(data);
-          setSongMetadataArray(ipfsMetadata);
+          if(data) {
+            const metadata = await fetchUserTokens(fullAccount);
+            setListedNFTs(metadata);
+            const ipfsMetadata = await fetchIPFSMetadata(data);
+            setSongMetadataArray(ipfsMetadata);
 
-          const userSongs = ipfsMetadata.filter((item) => item.properties.songOwner === fullAccount); 
-          setUserIPFSSongs(userSongs);
+            const userSongs = ipfsMetadata.filter((item) => item.properties.songOwner === fullAccount); 
+            setUserIPFSSongs(userSongs);
+          }
           
         } catch (error) {
           console.log('Error fetching metadata', error);
@@ -102,7 +103,7 @@ function Profile() {
       </div>
       <div className='w-full flex items-start flex-col mt-1 mb-10'>
         <h2 className='text-l text-gray-300 flex items-center'>
-          <FaEthereum classname='mr-2' /> 
+          <FaEthereum className='mr-2' /> 
           {slicedAccount}
         </h2>
       </div>

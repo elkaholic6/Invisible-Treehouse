@@ -6,38 +6,20 @@ import { selectGenreListId } from '../redux/features/playerSlice';
 import ListedNFTsCards from '../components/ListedNFTsCards';
 import { fetchListedMetadata } from '../customHooks/fetchListedMetadata';
 import { Loader } from '../components';
+import { ethers } from "ethers";
+
+const API_KEY = import.meta.env.VITE_REACT_APP_ALCHEMY_API_KEY;
+const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${API_KEY}`);
 
 function Marketplace() {
   const [listedNFTs, setListedNFTs] = useState([]);
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    // Check if the user's wallet is connected
-    const checkWalletConnection = async () => {
-      try {
-        const wallet = await window.ethereum.request({ method: 'eth_accounts' });
-        if(wallet.length > 0) {
-          setIsWalletConnected(true);
-        }
-      } catch (error) {
-        setIsWalletConnected(false);
-      }
-    };
-  
-    checkWalletConnection();
-  
-    // Cleanup function to reset the wallet connection status when the component unmounts
-    return () => {
-      setIsWalletConnected(false);
-    };
-  }, []);
   
   useEffect(() => {
     const fetchMetadataAndSetState = async () => {
       try {
-        if(isWalletConnected) {
+        if(provider) {
           const metadata = await fetchListedMetadata();
           setListedNFTs(metadata);
         }
@@ -47,7 +29,7 @@ function Marketplace() {
     };
 
     fetchMetadataAndSetState();
-  }, [isWalletConnected]);
+  }, [provider]);
   const { activeSong, isPlaying, genreListId, songData, currentIndex } = useSelector((state) => state.player);
 
     const genreTitle = genres.find(({ value }) => value === genreListId)?.title;

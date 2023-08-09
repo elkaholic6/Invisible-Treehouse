@@ -16,12 +16,13 @@ function ConnectWallet({ fullAccount, setFullAccount }) {
         if (!ethereum) {
           console.log("Make sure you have metamask!");
           return;
-        } else {
-          console.log("We have the ethereum object", ethereum);
         }
   
         const accounts = await ethereum.request({ method: "eth_accounts" });
         const account = accounts[0];
+        if(account == undefined) {
+          return;
+        }
         const slicedAccount = account.slice(0, 5) + '...' + account.slice(38, 42)
   
         if (accounts.length !== 0) {        
@@ -62,15 +63,14 @@ function ConnectWallet({ fullAccount, setFullAccount }) {
       try {
         const { ethereum } = window;
         if (!ethereum) {
-          alert("Get MetaMask!");
+          const metamaskLink = "https://metamask.io/download.html";
+          alert(`To use this feature, please install MetaMask.\n\nGo here to download: ${metamaskLink}`);
           return;
         }
   
         const accounts = await ethereum.request({ method: "eth_requestAccounts" });
         provider = new ethers.providers.Web3Provider(window.ethereum);
-        console.log('provider, ', provider);
         signer = provider.getSigner();
-        console.log('signer: ', signer)
       } catch (error) {
         console.log(error)
       }

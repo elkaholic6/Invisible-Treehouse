@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { Searchbar, Sidebar, MusicPlayer, UploadMusicModal, ConnectWallet, PleaseConnectWallet } from './components';
@@ -9,54 +9,11 @@ import TreehouseMusic from './pages/TreehouseMusic';
 const App = () => {
   const [open, setOpen] = useState(false);
   const [fullAccount, setFullAccount] = useState('');
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const { currentTitle } = useSelector((state) => state.player);
-
-
-  useEffect(() => {
-    const checkWalletConnection = async () => {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.length > 0) {
-          setIsWalletConnected(true);
-          setFullAccount(accounts[0]);
-        } else {
-          setIsWalletConnected(false);
-          setFullAccount('');
-        }
-      } catch (error) {
-        setIsWalletConnected(false);
-        setFullAccount('');
-      }
-    };
-
-    checkWalletConnection();
-
-    const handleAccountsChanged = (accounts) => {
-      if (accounts.length > 0) {
-        setIsWalletConnected(true);
-        setFullAccount(accounts[0]);
-      } else {
-        setIsWalletConnected(false);
-        setFullAccount('');
-      }
-    };
-
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
-    }
-
-    return () => {
-      if (window.ethereum) {
-        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-      }
-    };
-  }, []);
 
 
   return (
     <div className="relative flex">
-      {isWalletConnected ? (
         <>
           <Sidebar open={open} setOpen={setOpen} fullAccount={fullAccount}/>
           <div className="flex-1 flex flex-col bg-gradient-to-br from-black to-[#8a4601] min-h-screen">
@@ -88,21 +45,6 @@ const App = () => {
               </div>
             )}  
           </>
-        ) : (
-          <div className="flex-1 flex flex-col bg-gradient-to-br from-black to-[#8a4601] min-h-screen">
-            <div className="flex flex-1 justify-center items-center h-screen">
-              <div className="flex flex-col items-center justify-center">
-                <PleaseConnectWallet />
-                <div className="flex flex-row pt-8">
-                  <ConnectWallet fullAccount={fullAccount} setFullAccount={setFullAccount} />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      
-
-      
     </div>
   );
 };

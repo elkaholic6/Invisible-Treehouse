@@ -1,11 +1,11 @@
 import { ethers } from "ethers";
 import Minter from '../../artifacts/contracts/mint/Minter.sol/Minter.json';
-import { marketplaceContract } from "./fetchMarketplaceContract";
+import { marketplaceContract, marketplaceContractWithoutSigner } from "./fetchMarketplaceContract";
 
 
 
 async function getTokensOwned(fullAccount) {
-    const tokensOwned = await marketplaceContract.getTokensOwned(fullAccount);
+    const tokensOwned = await marketplaceContractWithoutSigner.getTokensOwned(fullAccount);
     return tokensOwned;
   };
 
@@ -15,7 +15,7 @@ async function getListedTokensOwned(fullAccount) {
   };
 
 async function getOwnerListedTokens(minterContract, owner) {
-  return await marketplaceContract.getOwnerAmountListed(minterContract, owner);
+  return await marketplaceContractWithoutSigner.getOwnerAmountListed(minterContract, owner);
 }
 
   export default async function fetchUserTokens(fullAccount) {

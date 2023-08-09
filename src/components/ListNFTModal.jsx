@@ -120,7 +120,6 @@ function ListNFTModal({ minterContractFromNFTDetails, imageFromNFTDetails, nameF
                 currentlyListed: true
             };
             const isApproved = await _minterContractFromNFTDetails.isApprovedForAll(connectedWallet, marketplaceAddress);
-            console.log('isApproved: ', isApproved);
 
             if(error) {
                 console.log('Error is logging...', error);

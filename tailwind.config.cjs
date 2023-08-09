@@ -7,7 +7,6 @@ module.exports = withMT({
     extend: {
       colors: {
         black: '#191624',
-        // green: '#13ce66',
       },
       animation: {
         slideup: 'slideup 1s ease-in-out',
@@ -16,7 +15,7 @@ module.exports = withMT({
         slideright: 'slideright 1s ease-in-out',
         wave: 'wave 1.2s linear infinite',
         slowfade: 'slowfade 2.2s ease-in-out',
-        autoscroll: 'autoscroll 15s linear infinite'
+        autoscroll: 'autoscroll 12s linear infinite'
       },
       spinner: {
         default: 'loading-spinner',
@@ -43,8 +42,8 @@ module.exports = withMT({
           to: { opacity: 1, transform: 'translateX(0)' },
         },
         autoscroll: {
-          from: { transform: 'translateX(0%)' },
-          to: { transform: 'translateX(-100%)' }
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-8rem)' }
         },
         wave: {
           '0%': { transform: 'scale(0)' },

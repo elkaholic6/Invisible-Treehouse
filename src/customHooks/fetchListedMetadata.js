@@ -1,17 +1,20 @@
 import { ethers } from "ethers";
 import Minter from '../../artifacts/contracts/mint/Minter.sol/Minter.json';
-import { marketplaceContract } from "./fetchMarketplaceContract";
+import { marketplaceContractWithoutSigner } from "./fetchMarketplaceContract";
 
 
 export async function fetchListedMetadata() {
-    let transaction = await marketplaceContract.displayAllListedNfts();
+  
+  const API_KEY = import.meta.env.VITE_REACT_APP_ALCHEMY_API_KEY;
+
+
+    let transaction = await marketplaceContractWithoutSigner.displayAllListedNfts();
     let listedSongArray = [];
     for (const song of transaction) {
       const songMinterContractAddress = song.minterContract;
       const abi = Minter.abi;
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const minterContract = new ethers.Contract(songMinterContractAddress, abi, signer);
+      const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${API_KEY}`);
+      const minterContract = new ethers.Contract(songMinterContractAddress, abi, provider);
 
       const songNFT = await minterContract.uri(parseInt(song.tokenId.toString()));
       const cleanedUrl = songNFT.replace("ipfs://", "").replace("/metadata.json", "");
