@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import Minter from '../../artifacts/contracts/mint/Minter.sol/Minter.json';
-import { marketplaceContract, marketplaceContractWithoutSigner } from "./fetchMarketplaceContract";
+import { marketplaceContractWithoutSigner } from "./fetchMarketplaceContract";
+import { marketplaceContract } from "./fetchMarketplaceContractWithWallet";
 
 
 

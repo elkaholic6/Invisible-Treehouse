@@ -11,8 +11,6 @@ const Track = ({ isPlaying, isActive, currentTitle, currentArtist, songCoverArt 
 
   useEffect(() => {
     const checkOverflow = (container, content) => {
-      console.log('scrollWidth: ', content.scrollWidth);
-      console.log('clientwidth: ', container.clientWidth)
       if (container && content && content.scrollWidth > container.clientWidth) {
         if(content.textContent === currentTitle) {
           setTitleAnimation(true);

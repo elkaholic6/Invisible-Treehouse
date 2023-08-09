@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { marketplaceContract, marketplaceAddress } from '../customHooks/fetchMarketplaceContract';
+import { marketplaceContract } from '../customHooks/fetchMarketplaceContractWithWallet';
+import { marketplaceAddress } from '../customHooks/fetchMarketplaceContract';
 import Minter from '../../artifacts/contracts/mint/Minter.sol/Minter.json';
 import { ethers } from "ethers";
 import ErrorMessage from './ErrorMessage';
