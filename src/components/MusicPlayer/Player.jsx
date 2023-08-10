@@ -16,7 +16,6 @@ const Player = ({ activeSong, isPlaying, volume, onEnded, onTimeUpdate, onLoaded
     if (mounted) {
       if (isPlaying) {
         setStartTime(ref.current.currentTime);
-        // console.log('startTime: ', ref.current.currentTime);
       } else {
         const duration = ref.current.currentTime - startTime;
         setStreamedDuration(duration);
@@ -26,7 +25,6 @@ const Player = ({ activeSong, isPlaying, volume, onEnded, onTimeUpdate, onLoaded
   }, [isPlaying, mounted]);
 
   useEffect(() => {
-    // console.log('totalStreamedDuration: ', totalStreamedDuration);
   }, [totalStreamedDuration]);
 
   useEffect(() => {
@@ -38,14 +36,12 @@ const Player = ({ activeSong, isPlaying, volume, onEnded, onTimeUpdate, onLoaded
 
   useEffect(() => {
     if (!isSeeking) {
-      // console.log('currentTime: ', ref.current.currentTime);
       ref.current.currentTime = seekvalue;
     }
   }, [isSeeking]);
 
 
-
-  // eslint-disable-next-line no-unused-expressions
+  useEffect(() => {
   if (ref.current) {
     if (isPlaying) {
       ref.current.play().then(_ => {
@@ -58,6 +54,7 @@ const Player = ({ activeSong, isPlaying, volume, onEnded, onTimeUpdate, onLoaded
       ref.current.pause();
     }
   }
+}, [activeSong, isPlaying])
 
   useEffect(() => {
     ref.current.volume = volume;
