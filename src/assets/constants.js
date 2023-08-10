@@ -19,7 +19,7 @@ export const genres = [
 ];
 
 export const links = [
-  { name: 'Profile', to: `/treehouse-profile/:fullAccount`, icon: HiOutlineUserGroup },
+  // { name: 'Profile', to: `/treehouse-profile/:fullAccount`, icon: HiOutlineUserGroup },
   { name: 'Discover', to: '/', icon: HiOutlineHome },
   { name: 'Marketplace', to: '/treehouse-marketplace', icon: HiOutlinePhotograph}
 ];

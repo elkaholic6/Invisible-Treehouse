@@ -80,7 +80,7 @@ function ConnectWallet({ fullAccount, setFullAccount }) {
     <div className="flex flex-row justify-start items-center">
       {currentAccount === 'Connect Wallet' ? (
         <button 
-          className="flex  flex-initial w-32 btn bg-[#228c42] text-white hover:bg-[#1c6f35] rounded-md font-normal py-1 pl-2.5 mr-3"
+          className="md:flex hidden flex-initial w-32 btn bg-[#228c42] text-white hover:bg-[#1c6f35] rounded-md font-normal py-1 pl-2.5 mr-10 md:mr-3"
           onClick={connectWallet}>
             Connect Wallet
         </button>     

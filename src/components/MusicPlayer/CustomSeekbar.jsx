@@ -58,7 +58,7 @@ const CustomSeekbar = ({ value, min, max, onChange, onSeekStart, onSeekEnd }) =>
     <div className="flex flex-row items-center">
       <div
         ref={trackRef}
-        className="md:block w-24 md:w-56 2xl:w-96 h-1 mx-4 2xl:mx-6 rounded-lg bg-gray-300"
+        className={`md:block ${window.innerWidth < 350 ? 'w-16' : 'w-20 md:w-56 2xl:w-96'}  h-1 mx-4 2xl:mx-6 rounded-lg bg-gray-300`}
         style={{ 
           position: 'relative', 
           cursor: 'pointer',
@@ -76,7 +76,7 @@ const CustomSeekbar = ({ value, min, max, onChange, onSeekStart, onSeekEnd }) =>
           }}
         ></div>
         <div
-          className="h-5 w-5 2xl:h-6 2xl:w-6 bg-red-500 rounded-full"
+          className="h-4 w-4 2xl:h-5 2xl:w-5 bg-red-500 rounded-full"
           style={{
             position: `absolute`,
             top: '50%',

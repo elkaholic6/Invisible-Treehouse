@@ -44,10 +44,10 @@ const Track = ({ isPlaying, isActive, currentTitle, currentArtist, songCoverArt 
 
   return (
     <div className="flex-1 flex items-center">
-      <div className='h-10 w-16 md:h-16 md:w-20 mb-4 mr-2'>
-        <img src={songCoverArt} alt="cover art" className={`${isPlaying && isActive ? 'animate-[spin_5s_linear_infinite]' : ''} rounded-full`} />
+      <div className={`${window.innerWidth >= 350 ? 'h-6 w-10 md:h-12 md:w-16 mb-4 mr-2' : 'hidden'}`}>
+        <img src={songCoverArt} alt="cover art" className={`${isPlaying && isActive ? 'animate-[spin_5s_linear_infinite]' : ''} rounded-full ${window.innerWidth >= 350 ? '' : 'hidden'}`} />
       </div>
-      <div className="max-w-[100px] md:max-w-[200px] lg:max-w-[300px] overflow-hidden">
+      <div className="max-w-[100px] md:max-w-[200px] lg:max-w-[300px] mr-3 overflow-hidden">
         <p
           ref={titleContainerRef}
           className={`whitespace-nowrap text-white font-bold text-sm md:text-lg ${

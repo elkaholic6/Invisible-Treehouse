@@ -58,7 +58,7 @@ const Sidebar = ({ open, setOpen, fullAccount }) => {
         <div className='absolute top-28'>
           <NavLinks fullAccount={fullAccount} showProfileLink={!mobileMenuOpen} handleClick={() => setMobileMenuOpen(false) }/>
         </div>
-        <div className='absolute top-1/2'>
+        <div className='absolute top-1/2 hidden'>
           <UploadMusicButton open={open} setOpen={setOpen}/>
         </div>
       </div>
