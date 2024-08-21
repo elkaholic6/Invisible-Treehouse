@@ -34,10 +34,9 @@ async function getOwnerListedTokens(minterContract, owner) {
         const balance = await minterContract.balanceOf(fullAccount, 1);
         const quantityListed = await getOwnerListedTokens(minterContract.address, fullAccount);
 
-        const songNFT = await minterContract.uri(1);
-        const cleanedUrl = songNFT.replace("ipfs://", "").replace("/metadata.json", "");
+        const cleanedUrl = await minterContract.uri(1);
 
-        const response = await fetch(`https://ipfs.io/ipfs/${cleanedUrl}/metadata.json`);
+        const response = await fetch(`${cleanedUrl}`);
         const metadata = await response.json();
         const cleanedAudio = metadata.animation_url.replace('ipfs://', 'https://ipfs.io/ipfs/');
         const cleanedImage = metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/');

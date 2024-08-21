@@ -2,21 +2,41 @@ import { ethers } from "ethers";
 import Minter from '../artifacts/contracts/mint/Minter.sol/Minter.json';
 import { marketplaceAddress } from "../src/customHooks/fetchMarketplaceContract";
 
-const API_KEY = import.meta.env.VITE_REACT_APP_ALCHEMY_API_KEY;
-
-
-const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${API_KEY}`);
-const signer = provider.getSigner();
 let account;
 
+async function getSigner() {
+  try {
+    if (!window.ethereum) {
+      throw new Error('Ethereum provider (MetaMask) is not available');
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    return signer;
+  } catch (error) {
+    console.error("Error getting signer:", error);
+    throw error;
+  }
+}
+
 async function getAccountAddress() {
-  account = await signer.getAddress();
-  return account;
+  try {
+    const signer = await getSigner();
+    const account = await signer.getAddress();
+    if (!account) {
+      throw new Error('Account address is null');
+    }
+    return account;
+  } catch (error) {
+    console.error("Error getting account address:", error);
+    throw error;
+  }
 }
 
 async function deploy(_ipfs, marketplaceContract, royaltyFee) {
-  console.log('deploy function is being called');
   account = await getAccountAddress();
+
+  const signer = await getSigner();
 
 
   const minterFactory = new ethers.ContractFactory(
@@ -24,6 +44,7 @@ async function deploy(_ipfs, marketplaceContract, royaltyFee) {
     Minter.bytecode,
     signer
   );
+  console.log("Deploying Minter contract...");
   const minter = await minterFactory.deploy(
     _ipfs, 
     marketplaceContract,
@@ -42,7 +63,7 @@ async function deploy(_ipfs, marketplaceContract, royaltyFee) {
 
 async function mintNFT(contractAddress, quantity) {
   account = await getAccountAddress();
-
+  const signer = await getSigner();
   const contractABI = Minter.abi;
 
 
@@ -55,6 +76,7 @@ async function mintNFT(contractAddress, quantity) {
 
 async function deployAndMint(_ipfs, quantity, royaltyFee) {
   const _contract = await deploy(_ipfs, marketplaceAddress, royaltyFee);
+  console.log("Deployed contract address:", _contract.address);
   await mintNFT(_contract.address, quantity);
 }
 

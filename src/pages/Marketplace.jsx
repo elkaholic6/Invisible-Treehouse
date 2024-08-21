@@ -8,8 +8,7 @@ import { fetchListedMetadata } from '../customHooks/fetchListedMetadata';
 import { Loader } from '../components';
 import { ethers } from "ethers";
 
-const API_KEY = import.meta.env.VITE_REACT_APP_ALCHEMY_API_KEY;
-const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${API_KEY}`);
+const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 function Marketplace() {
   const [listedNFTs, setListedNFTs] = useState([]);

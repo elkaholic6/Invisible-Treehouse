@@ -5,8 +5,8 @@ import TreehouseSongCard from '../components/TreehouseSongCard';
 import { genres } from '../assets/constants';
 import { selectGenreListId, playPause } from '../redux/features/playerSlice';
 import fetchIPFSMetadata from '../customHooks/fetchIPFSMetadata';
-import { useFetchNftsQuery } from '../redux/services/nftStorageApi';
 import { Error, Loader } from '../components';
+import { listNFTs } from '../redux/services/listFilesFromPinata';
 
 
 const TreehouseMusic = () => {
@@ -16,23 +16,22 @@ const TreehouseMusic = () => {
     const [songMetadataArray, setSongMetadataArray] = useState([]);
 
     const { activeSong, isPlaying, genreListId, songData, currentIndex } = useSelector((state) => state.player);
-    const { data, isFetching, error } = useFetchNftsQuery();
 
     useEffect(() => {
-        const fetchMetadataAndSetState = async () => {
+      const fetchMetadataAndSetState = async () => {
           try {
-            const metadata = await fetchIPFSMetadata(data);
-            setSongMetadataArray(metadata);
+              const data = await listNFTs(); // Fetch the list of NFTs
+              if (data) {
+                  const metadata = await fetchIPFSMetadata(data); 
+                  setSongMetadataArray(metadata);
+              }
           } catch (error) {
-            console.log('Error fetching metadata', error);
+              console.error('Error fetching metadata:', error);
           }
-        };
-        if(data) {
-          fetchMetadataAndSetState();
-        }
-      }, [data]);
+      };
 
-    if(error) return <Error />;
+      fetchMetadataAndSetState(); // Call the function directly
+  }, []);
 
 
     const genreTitle = genres.find(({ value }) => value === genreListId)?.title;
@@ -72,10 +71,10 @@ const TreehouseMusic = () => {
                               i: currentIndex,
                             },
                           }}
-                          key={cid}
+                          key={`${cid}-${currentIndex}`}
                         >
                           <TreehouseSongCard
-                            key={cid}
+                            key={`${cid}-${currentIndex}`}
                             name={name}
                             artist={properties.artist}
                             animation_url={animation_url}

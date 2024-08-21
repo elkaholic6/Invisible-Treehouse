@@ -5,6 +5,7 @@ import { useFetchNftsQuery } from '../redux/services/nftStorageApi';
 import { Error, Loader, TreehouseSongCard } from '../components';
 import fetchIPFSMetadata from '../customHooks/fetchIPFSMetadata';
 import { useState, useEffect } from 'react';
+import { listNFTs } from '../redux/services/listFilesFromPinata';
 
 const Search = () => {
     const [results, setResults] = useState([]);
@@ -12,17 +13,20 @@ const Search = () => {
     
     const { searchTerm } = useParams();
     const { activeSong, isPlaying, songData, currentIndex } = useSelector((state) => state.player);
-    const { data, isFetching, error } = useFetchNftsQuery();
+    // const { data, isFetching, error } = useFetchNftsQuery();
 
     useEffect(() => {
         const fetchMetadataAndSetState = async () => {
           try {
-            const metadata = await fetchIPFSMetadata(data);
-            setSongMetadataArray(metadata);
-            const filteredSongs = metadata.filter((song) => {
-                return song.name.toLowerCase().includes(searchTerm.toLowerCase()) || song.properties.artist.toLowerCase().includes(searchTerm.toLowerCase()) || song.description.includes(searchTerm.toUpperCase());
-            });
-            setResults(filteredSongs);
+            const data = await listNFTs();
+            if(data) {
+              const metadata = await fetchIPFSMetadata(data);
+              setSongMetadataArray(metadata);
+              const filteredSongs = metadata.filter((song) => {
+                  return song.name.toLowerCase().includes(searchTerm.toLowerCase()) || song.properties.artist.toLowerCase().includes(searchTerm.toLowerCase()) || song.description.includes(searchTerm.toUpperCase());
+              });
+              setResults(filteredSongs);
+            }
           } catch (error) {
             console.log('Error fetching metadata', error);
           }
@@ -30,7 +34,7 @@ const Search = () => {
         if(data) {
           fetchMetadataAndSetState();
         }
-      }, [data, searchTerm]);
+      }, [searchTerm]);
     
     
 

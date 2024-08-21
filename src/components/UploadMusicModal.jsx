@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { NFTStorage } from 'nft.storage';
+import React, { useState } from 'react'
 import deployAndMint from "../../scripts/deploy";
 import { genres } from '../assets/constants';
 import { RiCloseLine } from 'react-icons/ri';
 import UploadMusicButton from './UploadMusicButton';
 import ErrorMessage from './ErrorMessage';
 import ConsoleLogMessage from './ConsoleLogMessage';
+import { PinataSDK } from 'pinata';
 
+const PINATA_GATEWAY_URL = import.meta.env.VITE_REACT_APP_PINATA_GATEWAY;
+const PINATA_JWT = import.meta.env.VITE_REACT_APP_PINATA_JWT_SECRET_ACCESS_TOKEN;
 
-const API_KEY = import.meta.env.VITE_REACT_APP_NFT_STORAGE_KEY;
+const pinata = new PinataSDK({
+    pinataJwt: PINATA_JWT,
+    pinataGateway: PINATA_GATEWAY_URL,
+});
 
 function UploadMusicModal({ fullAccount, open, setOpen }) {
     const [genre, setGenre] = useState('POP');
@@ -71,33 +76,32 @@ function UploadMusicModal({ fullAccount, open, setOpen }) {
 
     async function uploadMusicToIPFS() {
         try {
-        setError(null);
-        setConsoleLogMessage("Storing to ipfs...");
-        setIsUploading(true);
-        const client = new NFTStorage({ token: API_KEY });
+            setError(null);
+            setConsoleLogMessage("Storing to IPFS...");
+            setIsUploading(true);
 
-        const audioBlob = new Blob([audioTerm]);
-        const imageBlob = new Blob([coverArtTerm], { type: 'image/png' });
+            const audioFile = new File([audioTerm], 'audio.mp3', { type: 'audio/mp3' });
+            const uploadAudio = await pinata.upload.file(audioFile);
 
-        const nft = {
-            image: imageBlob,
-            animation_url: audioBlob,
-            name: titleTerm,
-            description: genre,
-            properties: {
-                artist: artistTerm,
-                songOwner: fullAccount,
-            }
-        }
+            const imageFile = new File([coverArtTerm], 'image.png', { type: 'image/png' });
+            const uploadImage = await pinata.upload.file(imageFile);
 
-        const metadata = await client.store(nft);
+            const metadata = await pinata.upload.json({
+                image: `ipfs://${uploadImage.IpfsHash}`,
+                animation_url: `ipfs://${uploadAudio.IpfsHash}`,
+                name: titleTerm,
+                description: genre,
+                properties: {
+                    artist: artistTerm,
+                    songOwner: fullAccount,
+                }
+            });
+            const uri = `https://gateway.pinata.cloud/ipfs/${metadata.IpfsHash}`;
 
-        setConsoleLogMessage('Metadata stored! Continue to make this an NFT');
-        console.log('Metadata URI: ', metadata.url);
-        const uri = metadata.url;
-        setURI(uri);
-        setIsUploading(false);
-        setReadyForDeploy(true);
+            setConsoleLogMessage('Metadata stored! Continue to make this an NFT');
+            setURI(uri);
+            setIsUploading(false);
+            setReadyForDeploy(true);
 
         } catch (error) {
             const errorMessage = error.message;

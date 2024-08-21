@@ -8,21 +8,9 @@ import TreehouseSongCard from '../components/TreehouseSongCard';
 import { FaEthereum, FaWallet } from 'react-icons/fa';
 import fetchUserTokens from '../customHooks/fetchUserTokens';
 import fetchIPFSMetadata from '../customHooks/fetchIPFSMetadata';
-import { useFetchNftsQuery } from '../redux/services/nftStorageApi';
 import { Loader } from '../components';
+import { listNFTs } from '../redux/services/listFilesFromPinata';
 
-// const API_KEY = import.meta.env.VITE_REACT_APP_ALCHEMY_API_KEY;
-// const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${API_KEY}`);
-
-
-
-
-// const marketplaceAddress = "0x316Fbd5e5759CEcF3fcBBC59965d7787abbd4290";
-// const marketplaceAbi = NFTMarketplace.abi;
-// const signer = provider.getSigner();
-// const marketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceAbi, signer);
-
-// export { marketplaceContract };
 
 function Profile() {
     const [listedNFTs, setListedNFTs] = useState([]);
@@ -33,7 +21,6 @@ function Profile() {
     const { fullAccount } = useParams();
 
     const { activeSong, isPlaying, genreListId, songData, currentIndex } = useSelector((state) => state.player);
-    const { data, isFetching, error } = useFetchNftsQuery();
 
 
     function roundToTenThousandth(number) {
@@ -68,6 +55,7 @@ function Profile() {
     useEffect(() => {
       const fetchMetadataAndSetState = async () => {
         try {
+          const data = await listNFTs();
           if(data) {
             const metadata = await fetchUserTokens(fullAccount);
             setListedNFTs(metadata);
@@ -84,7 +72,7 @@ function Profile() {
       };
   
       fetchMetadataAndSetState();
-    }, [data]);
+    }, []);
 
 
 
@@ -141,7 +129,7 @@ function Profile() {
                       i: currentIndex,
                     },
                   }}
-                  key={cid}
+                  key={`${cid}-${listingId}`}
                 >
                   <OwnedNFTsCards
                       image={image}
@@ -152,7 +140,7 @@ function Profile() {
                       listingCreator={listingCreator}
                       listingId={listingId}
                       currentlyListed={currentlyListed}
-                      key={cid}
+                      key={`${cid}-${listingId}`}
                       name={name}
                       artist={properties.artist}
                       animation_url={animation_url}

@@ -5,21 +5,19 @@ import { marketplaceContractWithoutSigner } from "./fetchMarketplaceContract";
 
 export async function fetchListedMetadata() {
   
-  const API_KEY = import.meta.env.VITE_REACT_APP_ALCHEMY_API_KEY;
-
 
     let transaction = await marketplaceContractWithoutSigner.displayAllListedNfts();
     let listedSongArray = [];
     for (const song of transaction) {
       const songMinterContractAddress = song.minterContract;
       const abi = Minter.abi;
-      const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${API_KEY}`);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       const minterContract = new ethers.Contract(songMinterContractAddress, abi, provider);
 
       const songNFT = await minterContract.uri(parseInt(song.tokenId.toString()));
-      const cleanedUrl = songNFT.replace("ipfs://", "").replace("/metadata.json", "");
+      const cleanedUrl = songNFT.replace("https://gateway.pinata.cloud/ipfs/", "");
 
-      const response = await fetch(`https://ipfs.io/ipfs/${cleanedUrl}/metadata.json`);
+      const response = await fetch(songNFT);
       const metadata = await response.json();
       const cleanedAudio = metadata.animation_url.replace('ipfs://', 'https://ipfs.io/ipfs/');
       const cleanedImage = metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/');

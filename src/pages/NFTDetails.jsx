@@ -94,7 +94,7 @@ function NFTDetails() {
                             <p className='text-sm truncate flex flex-row justify-between'>
                                 <span className='text-blue-300 mr-2 mt-4'>Token Address:</span>
                                 <span className='font-bold text-white mt-4 text-right'>
-                                    <Link to={`https://goerli.etherscan.io/address/${nftData.nftData.minterContract}`}>
+                                    <Link to={`https://sepolia.etherscan.io/address/${nftData.nftData.minterContract}`}>
                                         {(nftData.nftData.minterContract).slice(0,5) + '...' + (nftData.nftData.minterContract).slice(-5)}
                                     </Link>
                                 </span>
@@ -137,7 +137,7 @@ function NFTDetails() {
                             <p className='text-sm truncate flex flex-row justify-between'>
                                 <span className='text-blue-300 mr-2 mt-4'>Token Address:</span>
                                 <span className='font-bold text-white mt-4 text-right'>
-                                    <Link to={`https://goerli.etherscan.io/address/${nftData.nftData.minterContract}`}>
+                                    <Link to={`https://sepolia.etherscan.io/address/${nftData.nftData.minterContract}`}>
                                         {(nftData.nftData.minterContract).slice(0,5) + '...' + (nftData.nftData.minterContract).slice(-5)}
                                     </Link>
                                 </span>
@@ -145,7 +145,7 @@ function NFTDetails() {
                             <p className='text-sm truncate flex flex-row justify-between'>
                                 <span className='text-blue-300 mr-2 mt-2'>Listing Creator:</span>
                                 <span className='font-bold text-white mt-2 text-right'>
-                                    <Link to={`https://goerli.etherscan.io/address/${nftData.nftData.listingCreator}`}>
+                                    <Link to={`https://sepolia.etherscan.io/address/${nftData.nftData.listingCreator}`}>
                                         {(nftData.nftData.listingCreator).slice(0,5) + '...' + (nftData.nftData.listingCreator).slice(-5)}
                                     </Link>
                                 </span>

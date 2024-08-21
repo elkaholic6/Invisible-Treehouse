@@ -1,7 +1,7 @@
 import NFTMarketplace from '../../artifacts/contracts/marketplace/NFTMarketplace.sol/NFTMarketplace.json';
 import { ethers } from "ethers";
 
-const marketplaceAddress = "0x644BCEC4dd5cDF505467E215dfB6E45a61F77808";
+const marketplaceAddress = "0x027628dB4329763Da08Ecb0ADA120c1a5408be92";
 const abi = NFTMarketplace.abi;
 const { ethereum } = window;
 
