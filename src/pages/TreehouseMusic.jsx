@@ -16,7 +16,7 @@ const TreehouseMusic = () => {
     const [songMetadataArray, setSongMetadataArray] = useState([]);
 
     const { activeSong, isPlaying, genreListId, songData, currentIndex } = useSelector((state) => state.player);
-
+  
     useEffect(() => {
       const fetchMetadataAndSetState = async () => {
           try {
@@ -71,10 +71,10 @@ const TreehouseMusic = () => {
                               i: currentIndex,
                             },
                           }}
-                          key={`${cid}-${currentIndex}`}
+                          key={cid}
                         >
                           <TreehouseSongCard
-                            key={`${cid}-${currentIndex}`}
+                            key={cid}
                             name={name}
                             artist={properties.artist}
                             animation_url={animation_url}

@@ -78,7 +78,7 @@ function Marketplace() {
                             i: currentIndex,
                           },
                         }}
-                        key={cid + listingId}
+                        key={cid}
                       >
                         <ListedNFTsCards
                           image={image}
@@ -134,7 +134,7 @@ function Marketplace() {
                               i: currentIndex,
                             },
                           }}
-                          key={cid + listingId}
+                          key={cid}
                         >
                           <ListedNFTsCards
                             image={image}
