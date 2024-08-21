@@ -7,6 +7,9 @@ import { selectGenreListId, playPause } from '../redux/features/playerSlice';
 import fetchIPFSMetadata from '../customHooks/fetchIPFSMetadata';
 import { Error, Loader } from '../components';
 import { listNFTs } from '../redux/services/listFilesFromPinata';
+import { ethers } from "ethers";
+
+const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 
 const TreehouseMusic = () => {
@@ -31,7 +34,7 @@ const TreehouseMusic = () => {
       };
 
       fetchMetadataAndSetState(); // Call the function directly
-  }, []);
+  }, [provider]);
 
 
     const genreTitle = genres.find(({ value }) => value === genreListId)?.title;
